@@ -1,0 +1,47 @@
+{
+  "name": "facebook-marketplace-mcp",
+  "version": "1.0.0",
+  "description": "MCP server + skill: Facebook Marketplace search, like-for-like price comparison, scam flags, watches",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/index.js",
+    "cli": "node dist/cli.js",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "mcp",
+    "facebook-marketplace",
+    "claude",
+    "price-comparison",
+    "playwright",
+    "israel"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "playwright": "^1.63.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "@vitest/coverage-v8": "^5.0.3",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  },
+  "bin": {
+    "fbmp": "dist/cli.js",
+    "facebook-marketplace-mcp": "dist/index.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ido6/facebook-marketplace-deals.git"
+  }
+}
