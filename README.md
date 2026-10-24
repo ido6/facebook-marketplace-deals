@@ -62,6 +62,8 @@ Locations: Facebook has vanity slugs only for some cities (`telaviv`, `jerusalem
 
 ## CLI
 
+Comparisons return the four highest-ranked qualifying deals by default, or fewer when fewer qualify. All fetched qualifying listings still contribute to the price benchmarks. The first four candidates receive detail checks before re-ranking; final replacements may not have detail checks. MCP callers can override `top_n` and `enrich_top`. Watch checks continue to process every ranked listing.
+
 ```bash
 node dist/cli.js compare "iphone 13 pro" "אייפון 13 פרו" --location "Tel Aviv" --min 800 --exclude כיסוי --report
 node dist/cli.js check-watches

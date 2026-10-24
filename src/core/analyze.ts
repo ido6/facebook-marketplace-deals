@@ -83,6 +83,7 @@ export interface CompareResult {
 }
 
 const DAY = 86400;
+export const DEFAULT_TOP_N = 4;
 
 /** Round to a price a human would say out loud. */
 export function roundNice(x: number): number {
@@ -326,7 +327,7 @@ export function compareListings(all: Listing[], opts: CompareOptions): CompareRe
     },
     overall: overallPool.stats,
     groups,
-    deals: deals.slice(0, opts.topN ?? 10),
+    deals: deals.slice(0, opts.topN ?? DEFAULT_TOP_N),
     suspicious,
     placeholders: placeholders.map((p) => ({ id: p.id, title: p.title, priceText: p.priceText, url: p.url })),
     notes,

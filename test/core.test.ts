@@ -168,6 +168,29 @@ describe("flags", () => {
 });
 
 describe("compare", () => {
+  it("returns the four highest-ranked qualifying deals by default", () => {
+    const listings = [900, 950, 1000, 1050, 1100, 1150].map((price, i) =>
+      mk({ id: String(i), price, city: `city${i}` }),
+    );
+    const all = compareListings(listings, { queries: ["iphone 13"], topN: 30 });
+    const result = compareListings(listings, { queries: ["iphone 13"] });
+    expect(result.deals).toEqual(all.deals.slice(0, 4));
+    expect(result.deals).toHaveLength(4);
+    expect(result.counts.analysed).toBe(6);
+    expect(result.overall).toEqual(all.overall);
+    expect(compareListings(listings, { queries: ["iphone 13"], topN: 2 }).deals).toHaveLength(2);
+  });
+
+  it("does not pad a short result with sold listings or placeholders", () => {
+    const result = compareListings([
+      mk({ id: "good" }),
+      mk({ id: "sold", isSold: true }),
+      mk({ id: "placeholder", price: 1 }),
+    ], { queries: ["iphone 13"] });
+    expect(result.deals.map((d) => d.id)).toEqual(["good"]);
+    expect(compareListings([], { queries: ["iphone 13"] }).deals).toEqual([]);
+  });
+
   it("groups the real fixture like-for-like and ranks deals", () => {
     const ls = extractListings(parseJsonBlocks(searchHtml));
     const r = compareListings(ls, { queries: ["iphone 13"], nowSec: 1_791_000_000 });
@@ -233,7 +256,9 @@ describe("compare", () => {
       ...[1000, 1050, 1100, 1200].map((p, i) => mk({ id: `n${i}`, price: p, city: `n${i}` })),
     ];
     const r = compareListings(ls, { queries: ["iphone 13"] });
-    expect(r.deals.findIndex((d) => d.id === "cheap")).toBeLessThan(r.deals.findIndex((d) => d.id === "cut"));
+    expect(r.deals[0].id).toBe("cheap");
+    const full = compareListings(ls, { queries: ["iphone 13"], topN: ls.length });
+    expect(full.deals.findIndex((d) => d.id === "cheap")).toBeLessThan(full.deals.findIndex((d) => d.id === "cut"));
   });
 
   it("ranks a real discount above the cheapest of a thin, at-market group", () => {

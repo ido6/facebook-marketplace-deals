@@ -10,6 +10,7 @@ import { Store } from "./store/db.js";
 import { compactRun, runCompare, runWatchCheck } from "./service.js";
 import { writeReports } from "./report.js";
 import { log } from "./log.js";
+import { DEFAULT_TOP_N } from "./core/analyze.js";
 
 type Content = { type: "text"; text: string } | { type: "image"; data: string; mimeType: string };
 
@@ -198,8 +199,8 @@ export function createServer(): { server: McpServer; shutdown: () => Promise<voi
         reference_price: z.number().positive().optional().describe("Known fair USED price from outside Marketplace; enables vsReferencePct and a scam check."),
         home_lat: z.number().min(-90).max(90).optional(),
         home_lng: z.number().min(-180).max(180).optional(),
-        enrich_top: z.number().int().min(0).max(8).default(3),
-        top_n: z.number().int().min(1).max(30).default(10),
+        enrich_top: z.number().int().min(0).max(8).default(DEFAULT_TOP_N),
+        top_n: z.number().int().min(1).max(30).default(DEFAULT_TOP_N).describe("Return the four best deals by default; fewer if fewer qualify."),
         export_report: z.boolean().default(false).describe("Also write CSV + HTML reports and return their paths."),
       },
       annotations: { readOnlyHint: false, openWorldHint: true },

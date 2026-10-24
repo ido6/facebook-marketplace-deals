@@ -4,7 +4,7 @@
 // candidates with their detail pages, and record price history.
 
 import { config } from "./config.js";
-import { compareListings, type CompareResult, type ScoredListing } from "./core/analyze.js";
+import { compareListings, DEFAULT_TOP_N, type CompareResult, type ScoredListing } from "./core/analyze.js";
 import type { Listing, ListingDetail } from "./core/types.js";
 import { BlockedError, NotAuthenticatedError, UnknownLocationError, type MarketplaceSession } from "./browser/session.js";
 import { buildSearchUrl, type Condition, type SortOrder } from "./browser/urls.js";
@@ -98,14 +98,14 @@ export async function runCompare(session: MarketplaceSession, store: Store, req:
     exclude: req.exclude,
     referencePrice: req.referencePrice ?? null,
     home: req.home ?? config.home,
-    topN: req.topN ?? 10,
+    topN: req.topN ?? DEFAULT_TOP_N,
   };
 
   // First pass ranks on search data; the top few get their detail page opened,
   // then we re-rank with condition, distance and description-based flags.
   const firstPass = compareListings(listings, opts);
   const details = new Map<string, ListingDetail>();
-  for (const d of firstPass.deals.slice(0, req.enrichTop ?? 3)) {
+  for (const d of firstPass.deals.slice(0, req.enrichTop ?? DEFAULT_TOP_N)) {
     try {
       details.set(d.id, await session.detail(d.id));
     } catch (e) {

@@ -27,6 +27,8 @@ Hard guardrails: the user types their own Facebook password (`marketplace_login`
 
 ## Reading the compare output
 
+- Return up to four best deals by default. Inspect every final pick; if a candidate fails inspection, fetch more candidates with `top_n` and inspect replacements. Never pad the shortlist with unsuitable listings. State when fewer than four qualify. Respect an explicit user-requested count.
+
 - `groups` are like-for-like variants (`pro · 256GB`); compare a listing only against its own variant. `benchmark.level` = `tier` or `all` means its variant was too thin and the median is a rougher yardstick.
 - `suspicious` holds high-severity flags (too cheap vs the group or reference, prepayment/deposit, parts/broken/locked, replica, buy requests, sold). Mention the pattern, do not shortlist them.
 - `placeholderPrices` (₪1, ₪123…) are sellers gaming the sort; real price unknown, only worth a message if the item is rare.
